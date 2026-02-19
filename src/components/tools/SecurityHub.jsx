@@ -42,12 +42,12 @@ const SecurityHub = () => {
         <div className="animate-in fade-in duration-700">
             {/* Session Security Perimeter */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 border-b border-white/[0.05]">
-                <div className="p-10 border-r border-white/[0.05]">
+                <div className="py-8 px-6 border-r border-b md:border-b-0 border-white/[0.05]">
                     <div className="flex items-center gap-3 mb-6">
                         <Fingerprint size={16} className="text-indigo-400" />
                         <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Authority Interface</span>
                     </div>
-                    <div className="mb-8">
+                    <div className="mb-8 font-black">
                         <ConnectButton />
                     </div>
                     {isConnected ? (
@@ -61,7 +61,7 @@ const SecurityHub = () => {
                     )}
                 </div>
 
-                <div className="p-10 border-r border-white/[0.05] bg-white/[0.02]">
+                <div className="py-8 px-6 border-r border-b md:border-b-0 border-white/[0.05] bg-white/[0.02]">
                     <div className="flex items-center gap-3 mb-4">
                         <ShieldAlert size={16} className="text-rose-500" />
                         <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Infinite Approvals Found</span>
@@ -79,7 +79,7 @@ const SecurityHub = () => {
                     )}
                 </div>
 
-                <div className="p-10 bg-white/[0.04]">
+                <div className="py-8 px-6 bg-white/[0.04]">
                     <div className="flex items-center gap-3 mb-4">
                         <Key size={16} className="text-indigo-400" />
                         <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Integrity Score</span>
@@ -93,7 +93,7 @@ const SecurityHub = () => {
 
             {/* Protocol Integrity Stream - Continuous Hub View */}
             <div className="w-full">
-                <div className="p-12 pb-8 flex justify-between items-end border-b border-white/[0.05]">
+                <div className="py-10 px-6 flex justify-between items-end border-b border-white/[0.05]">
                     <div>
                         <h2 className="text-sm font-black text-white uppercase tracking-widest mb-1">Protocol Integrity Stream</h2>
                         <p className="text-[10px] text-slate-500 font-bold uppercase tracking-tighter">Real-time audit telemetry and vulnerability disclosure logs</p>
@@ -105,65 +105,67 @@ const SecurityHub = () => {
                     </div>
                 </div>
 
-                <table className="terminal-table-edge w-full">
-                    <thead>
-                        <tr>
-                            <th className="pl-12">Protocol Identifier</th>
-                            <th>Current Network</th>
-                            <th>Integrity Status</th>
-                            <th>Audit Observations</th>
-                            <th>Verification Sig.</th>
-                            <th className="pr-12 text-right">Risk Vector</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {auditFeed.map((audit, i) => (
-                            <tr key={i} className={`hover:bg-white/[0.03] transition-colors border-b border-white/[0.02] last:border-0 ${audit.criticality === 'High' ? 'bg-rose-500/[0.03]' : ''}`}>
-                                <td className="pl-12 py-6">
-                                    <div className="flex items-center gap-4">
-                                        {audit.criticality === 'High' && <div className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse"></div>}
-                                        <div className="text-[13px] font-black text-white uppercase tracking-tighter group-hover:text-indigo-400 transition-colors">
-                                            {audit.project}
+                <div className="overflow-x-auto border-b border-white/[0.05]">
+                    <table className="terminal-table-edge w-full">
+                        <thead>
+                            <tr>
+                                <th className="px-6">Protocol Identifier</th>
+                                <th>Current Network</th>
+                                <th>Integrity Status</th>
+                                <th>Audit Observations</th>
+                                <th>Verification Sig.</th>
+                                <th className="px-6 text-right">Risk Vector</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {auditFeed.map((audit, i) => (
+                                <tr key={i} className={`hover:bg-white/[0.03] transition-colors border-b border-white/[0.02] last:border-0 ${audit.criticality === 'High' ? 'bg-rose-500/[0.03]' : ''}`}>
+                                    <td className="px-6 py-6 font-black">
+                                        <div className="flex items-center gap-4">
+                                            {audit.criticality === 'High' && <div className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse"></div>}
+                                            <div className="text-[13px] font-black text-white uppercase tracking-tighter group-hover:text-indigo-400 transition-colors">
+                                                {audit.project}
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{audit.network}</span>
-                                </td>
-                                <td>
-                                    <div className={`flex items-center gap-2 text-[10px] font-black uppercase tracking-widest ${audit.status === 'Verified' ? 'text-emerald-500' :
+                                    </td>
+                                    <td>
+                                        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{audit.network}</span>
+                                    </td>
+                                    <td>
+                                        <div className={`flex items-center gap-2 text-[10px] font-black uppercase tracking-widest ${audit.status === 'Verified' ? 'text-emerald-500' :
                                             audit.status === 'Critical' ? 'text-rose-500' : 'text-amber-500'
-                                        }`}>
-                                        {audit.status === 'Verified' ? <CheckCircle2 size={12} /> :
-                                            audit.status === 'Critical' ? <AlertTriangle size={12} /> :
-                                                <Activity size={12} className="animate-spin-slow" />}
-                                        {audit.status}
-                                    </div>
-                                </td>
-                                <td className="metric-mono text-slate-400 text-xs">
-                                    {audit.findings} Vulnerabilities Logged
-                                </td>
-                                <td className="metric-mono text-slate-600 text-[10px] font-bold italic tracking-tighter">
-                                    {audit.date} // 0xSecAuth_{i + 100}
-                                </td>
-                                <td className="pr-12 text-right">
-                                    <div className={`inline-flex px-3 py-1 rounded-sm text-[9px] font-black uppercase tracking-widest ${audit.criticality === 'High' ? 'bg-rose-600 text-white shadow-[0_0_15px_rgba(225,29,72,0.4)]' :
+                                            }`}>
+                                            {audit.status === 'Verified' ? <CheckCircle2 size={12} /> :
+                                                audit.status === 'Critical' ? <AlertTriangle size={12} /> :
+                                                    <Activity size={12} className="animate-spin-slow" />}
+                                            {audit.status}
+                                        </div>
+                                    </td>
+                                    <td className="metric-mono text-slate-400 text-xs text-right md:text-left">
+                                        {audit.findings} Vulnerabilities Logged
+                                    </td>
+                                    <td className="metric-mono text-slate-600 text-[10px] font-bold italic tracking-tighter hidden md:table-cell">
+                                        {audit.date} // 0xSecAuth_{i + 100}
+                                    </td>
+                                    <td className="px-6 text-right">
+                                        <div className={`inline-flex px-3 py-1 rounded-sm text-[9px] font-black uppercase tracking-widest ${audit.criticality === 'High' ? 'bg-rose-600 text-white shadow-[0_0_15px_rgba(225,29,72,0.4)]' :
                                             audit.criticality === 'Medium' ? 'text-amber-500 border border-amber-500/20 bg-amber-500/5' :
                                                 audit.criticality === 'Low' ? 'text-indigo-400 border border-indigo-500/20 bg-indigo-500/5' :
                                                     'text-slate-700 border border-white/[0.05]'
-                                        }`}>
-                                        {audit.criticality} RISK ADVISORY
-                                    </div>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                                            }`}>
+                                            {audit.criticality} RISK ADVISORY
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             {/* Managed Advisory Perimeter */}
             <div className="grid grid-cols-1 lg:grid-cols-2 border-t border-white/[0.05] divide-x divide-white/[0.05]">
-                <div className="p-12 hover:bg-white/[0.01] transition-colors group">
+                <div className="py-10 px-6 hover:bg-white/[0.01] transition-colors group">
                     <div className="flex items-center gap-3 mb-6">
                         <Info size={16} className="text-indigo-400" />
                         <h3 className="text-[11px] font-black text-white uppercase tracking-widest">Protocol Metadata Clusters</h3>
@@ -178,7 +180,7 @@ const SecurityHub = () => {
                     </div>
                 </div>
 
-                <div className="p-12 hover:bg-white/[0.01] transition-colors group">
+                <div className="py-10 px-6 hover:bg-white/[0.01] transition-colors group">
                     <div className="flex items-center gap-3 mb-6">
                         <Shield size={16} className="text-amber-500" />
                         <h3 className="text-[11px] font-black text-white uppercase tracking-widest">Global Risk Projections</h3>

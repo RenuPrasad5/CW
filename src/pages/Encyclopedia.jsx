@@ -22,7 +22,7 @@ import {
     Clock,
     ArrowLeft,
     Binary,
-    Layers,
+    Layers as LayersIcon,
     Rocket,
     Compass
 } from 'lucide-react';
@@ -159,7 +159,7 @@ const Encyclopedia = () => {
             case 'BlockchainFoundations': return <Database size={16} />;
             case 'CryptographyAndSecurity': return <Shield size={16} />;
             case 'DeFiEcosystems': return <Activity size={16} />;
-            case 'NetworkArchitecture': return <Layers size={16} />;
+            case 'NetworkArchitecture': return <LayersIcon size={16} />;
             case 'EconomicsAndTokenomics': return <Zap size={16} />;
             case 'AdvancedConsensus': return <Fingerprint size={16} />;
             case 'Layer2Scaling': return <Rocket size={16} />;

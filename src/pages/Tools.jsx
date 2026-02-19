@@ -30,16 +30,18 @@ const TickerTape = () => {
 
     return (
         <div className="w-full bg-slate-950 border-b border-slate-800 py-3 overflow-hidden z-[60] relative">
-            <div className="animate-ticker-v2">
-                {doubledData.map((item, idx) => (
-                    <div key={idx} className="ticker-item-v2">
-                        <span className="text-[11px] font-black text-white uppercase tracking-tighter">{item.sym}/USD</span>
-                        <span className="text-[11px] font-mono font-bold text-slate-400">{item.price}</span>
-                        <span className={`text-[10px] font-mono font-bold ${item.chg.startsWith('+') ? 'text-emerald-500' : 'text-rose-500'}`}>
-                            {item.chg}
-                        </span>
-                    </div>
-                ))}
+            <div className="terminal-container">
+                <div className="animate-ticker-v2">
+                    {doubledData.map((item, idx) => (
+                        <div key={idx} className="ticker-item-v2">
+                            <span className="text-[11px] font-black text-white uppercase tracking-tighter">{item.sym}/USD</span>
+                            <span className="text-[11px] font-mono font-bold text-slate-400">{item.price}</span>
+                            <span className={`text-[10px] font-mono font-bold ${item.chg.startsWith('+') ? 'text-emerald-500' : 'text-rose-500'}`}>
+                                {item.chg}
+                            </span>
+                        </div>
+                    ))}
+                </div>
             </div>
         </div>
     );
@@ -83,43 +85,53 @@ const Tools = () => {
             <TickerTape />
 
             <div className="border-b border-slate-900/40">
-                <button
-                    onClick={() => navigate('/')}
-                    className="back-link-subtle"
-                >
-                    <ArrowLeft size={14} /> Back to Terminal
-                </button>
+                <div className="terminal-container">
+                    <button
+                        onClick={() => navigate('/')}
+                        className="back-link-subtle"
+                    >
+                        <ArrowLeft size={14} /> Back to Terminal
+                    </button>
+                </div>
             </div>
 
             <nav className="tools-sticky-nav">
-                <div className="flex items-center">
-                    {tabs.map((tab) => (
-                        <button
-                            key={tab.id}
-                            className={`nav-tab-link ${activeTab === tab.id ? 'active' : ''}`}
-                            onClick={() => setActiveTab(tab.id)}
-                        >
-                            {tab.label}
-                        </button>
-                    ))}
+                <div className="terminal-container">
+                    <div className="nav-tab-links-container">
+                        {tabs.map((tab) => (
+                            <button
+                                key={tab.id}
+                                className={`nav-tab-link ${activeTab === tab.id ? 'active' : ''}`}
+                                onClick={() => setActiveTab(tab.id)}
+                            >
+                                {tab.label}
+                            </button>
+                        ))}
+                    </div>
                 </div>
             </nav>
 
             <header className="section-desc-box">
-                <h1 className="section-desc-title">{activeTabData.label}</h1>
-                <p className="section-desc-text">{activeTabData.description}</p>
+                <div className="terminal-container">
+                    <h1 className="section-desc-title">{activeTabData.label}</h1>
+                    <p className="section-desc-text">{activeTabData.description}</p>
+                </div>
             </header>
 
             <main className="content-area-terminal">
-                {renderActiveComponent()}
+                <div className="terminal-container">
+                    {renderActiveComponent()}
+                </div>
             </main>
 
-            <footer className="py-12 px-6 border-t border-slate-900 bg-slate-950/50">
-                <div className="flex flex-col md:flex-row justify-between items-center gap-8 opacity-40">
-                    <div className="flex items-center gap-6 text-[10px] font-bold text-slate-500 uppercase tracking-widest">
-                        <span>Real-time Sync Active</span>
-                        <div className="h-3 w-px bg-slate-800"></div>
-                        <span>&copy; 2026 CryptoWorld Intelligence</span>
+            <footer className="py-12 border-t border-slate-900 bg-slate-950/50">
+                <div className="terminal-container">
+                    <div className="flex flex-col md:flex-row justify-between items-center gap-8 opacity-40">
+                        <div className="flex items-center gap-6 text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                            <span>Real-time Sync Active</span>
+                            <div className="h-3 w-px bg-slate-800"></div>
+                            <span>&copy; 2026 CryptoWorld Intelligence</span>
+                        </div>
                     </div>
                 </div>
             </footer>

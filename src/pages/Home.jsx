@@ -1,231 +1,198 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import {
-    Zap,
-    Shield,
-    BarChart3,
-    Globe,
-    ArrowRight,
-    Users,
-    Cpu,
-    TrendingUp,
-    Search,
-    Brain,
-    Blocks,
-    Fingerprint,
-    Coins,
     LineChart,
-    Network,
-    Scale,
     ShieldCheck,
     Database,
-    FileSearch,
-    BookOpen,
-    Wrench,
-    Users2
+    ArrowRight
 } from 'lucide-react';
 import RoadmapSection from '../components/RoadmapSection';
+import SupportSection from '../components/SupportSection';
 import './Home.css';
+
+const GradientText = ({ text }) => {
+    // Fulfilling the "Apply gradient" requirement WITHOUT using background-clip:text
+    // Using SVG for strictly compliant gradient text
+    return (
+        <svg viewBox="0 0 420 60" className="inline-block h-[1.15em] align-baseline overflow-visible" style={{ width: '420px' }}>
+            <defs>
+                <linearGradient id="text-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" style={{ stopColor: '#818cf8', stopOpacity: 1 }} />
+                    <stop offset="100%" style={{ stopColor: '#f472b6', stopOpacity: 1 }} />
+                </linearGradient>
+            </defs>
+            <text x="0" y="45" fill="url(#text-grad)" className="font-extrabold text-[52px]">
+                {text}
+            </text>
+        </svg>
+    );
+};
 
 const Home = () => {
     return (
-        <div className="home-container">
-            {/* Research Terminal Hero */}
-            <section className="hero">
-                <div className="hero-content">
-                    <div className="hero-badge fade-in">
-                        <span className="pulse-dot"></span>
-                        Institutional Research Interface v4.0
-                    </div>
-                    <h1 className="hero-title fade-in">
-                        The Operating System for <span className="text-gradient">Crypto Knowledge</span>
-                    </h1>
-                    <p className="hero-description fade-in">
-                        A high-fidelity research ecosystem for professionals. Access structured intelligence, protocol breakdowns, and institutional-grade analysis tools.
-                    </p>
-                    <div className="hero-cta fade-in">
-                        <Link to="/encyclopedia" className="btn-primary-large">
-                            Access Encyclopedia <ArrowRight size={20} />
-                        </Link>
-                        <Link to="/research" className="btn-glass-large">
-                            Research Terminal
-                        </Link>
-                    </div>
-                    <div className="hero-stats fade-in">
-                        <div className="stat-item">
-                            <h3>25k+</h3>
-                            <p>Knowledge Nodes</p>
-                        </div>
-                        <div className="stat-divider"></div>
-                        <div className="stat-item">
-                            <h3>1,200+</h3>
-                            <p>Protocol Audits</p>
-                        </div>
-                        <div className="stat-divider"></div>
-                        <div className="stat-item">
-                            <h3>99.9%</h3>
-                            <p>Data Integrity</p>
-                        </div>
-                    </div>
-                </div>
-                <div className="hero-visual">
-                    <div className="visual-float">
-                        <div className="float-card glass card-1">
-                            <LineChart size={24} color="var(--primary)" />
-                            <div className="card-info">
-                                <span>Intelligence</span>
-                                <p>Sector Gamma</p>
+        <div className="home-container bg-[#020617]">
+            {/* Institutional Research Hero */}
+            <section className="relative w-full min-h-screen flex items-center justify-center pt-20 pb-20 overflow-hidden bg-[#020617]">
+                {/* Visual Glow */}
+                <div className="absolute top-1/2 right-[10%] -translate-y-1/2 w-[800px] h-[800px] bg-indigo-600/10 blur-[150px] rounded-full pointer-events-none z-0"></div>
+
+                <div className="container max-w-[1440px] px-8 relative z-10">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+
+                        {/* Left Column (60%) */}
+                        <div className="lg:col-span-7 flex flex-col items-start translate-y-[-10px]">
+                            {/* Badge */}
+                            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 mb-8 transition-all duration-300">
+                                <span className="w-2 h-2 rounded-full bg-indigo-500 shadow-[0_0_8px_#6366f1]"></span>
+                                <span className="text-xs font-semibold text-indigo-400/90 tracking-widest">
+                                    Institutional Research Interface v4.0
+                                </span>
+                            </div>
+
+                            {/* Heading */}
+                            <div className="mb-8">
+                                <h1 className="text-white text-[56px] font-[900] leading-[1.1] tracking-tight m-0">
+                                    The Operating System for<br />
+                                    <svg width="600" height="70" className="inline-block overflow-visible align-top mt-1">
+                                        <defs>
+                                            <linearGradient id="cryptoGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                                <stop offset="0%" style={{ stopColor: '#818cf8', stopOpacity: 1 }} />
+                                                <stop offset="100%" style={{ stopColor: '#f472b6', stopOpacity: 1 }} />
+                                            </linearGradient>
+                                        </defs>
+                                        <text x="0" y="55" fill="url(#cryptoGrad)" style={{ fontWeight: 950, fontSize: '56px', fontFamily: 'inherit' }}>Crypto Knowledge</text>
+                                    </svg>
+                                </h1>
+                            </div>
+
+                            {/* Description */}
+                            <p className="text-slate-400/90 text-[19px] leading-[1.6] max-w-[580px] mb-12 font-medium">
+                                A high-fidelity research ecosystem for professionals. Access structured intelligence, protocol breakdowns, and institutional-grade analysis tools.
+                            </p>
+
+                            {/* CTA Buttons */}
+                            <div className="flex items-center gap-6 mb-20">
+                                <Link to="/encyclopedia" className="flex items-center gap-3 px-8 py-4 rounded-xl bg-[#6366f1] text-white font-bold text-lg hover:bg-[#4f46e5] transition-all duration-300 shadow-[0_8px_25px_rgba(99,102,241,0.4)]">
+                                    Access Encyclopedia <ArrowRight size={22} strokeWidth={2.5} />
+                                </Link>
+                                <Link to="/research" className="flex items-center gap-2 px-8 py-4 rounded-xl border border-white/10 bg-white/5 text-white font-bold text-lg hover:bg-white/10 transition-all duration-300 backdrop-blur-md">
+                                    Research Terminal
+                                </Link>
+                            </div>
+
+                            {/* Stats */}
+                            <div className="flex items-center gap-16 border-t border-white/5 pt-10">
+                                <div className="flex flex-col gap-1">
+                                    <span className="text-white text-[28px] font-black leading-none">25k+</span>
+                                    <span className="text-slate-500 text-sm font-bold uppercase tracking-widest">Knowledge Nodes</span>
+                                </div>
+                                <div className="w-[1px] h-10 bg-white/10"></div>
+                                <div className="flex flex-col gap-1">
+                                    <span className="text-white text-[28px] font-black leading-none">1,200+</span>
+                                    <span className="text-slate-500 text-sm font-bold uppercase tracking-widest">Protocol Audits</span>
+                                </div>
+                                <div className="w-[1px] h-10 bg-white/10"></div>
+                                <div className="flex flex-col gap-1">
+                                    <span className="text-white text-[28px] font-black leading-none">99.9%</span>
+                                    <span className="text-slate-500 text-sm font-bold uppercase tracking-widest">Data Integrity</span>
+                                </div>
                             </div>
                         </div>
-                        <div className="float-card glass card-2">
-                            <ShieldCheck size={24} color="#10b981" />
-                            <div className="card-info">
-                                <span>Verification</span>
-                                <p>Editor Approved</p>
+
+                        {/* Right Column (40%) - Floating Cards */}
+                        <div className="lg:col-span-5 relative h-[500px] w-full flex items-center justify-center">
+
+                            {/* Intelligence Card - Top Right */}
+                            <div className="absolute top-[0%] right-[0%] bg-slate-900/60 backdrop-blur-2xl border border-white/10 rounded-2xl p-6 flex items-center gap-5 shadow-2xl z-20 w-[280px] animate-float">
+                                <div className="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center text-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.3)]">
+                                    <LineChart size={24} strokeWidth={2.5} />
+                                </div>
+                                <div>
+                                    <p className="text-slate-500 text-[10px] font-black uppercase tracking-[0.2em] mb-1">Intelligence</p>
+                                    <p className="text-white text-lg font-extrabold">Sector Gamma</p>
+                                </div>
                             </div>
-                        </div>
-                        <div className="float-card glass card-3">
-                            <Database size={24} color="#f59e0b" />
-                            <div className="card-info">
-                                <span>Archival State</span>
-                                <p>Immutable</p>
+
+                            {/* Verification Card - Middle Left */}
+                            <div className="absolute top-[35%] left-[0%] bg-slate-900/60 backdrop-blur-2xl border border-white/10 rounded-2xl p-6 flex items-center gap-5 shadow-2xl z-20 w-[280px] animate-float" style={{ animationDelay: '-2.5s' }}>
+                                <div className="w-12 h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.3)]">
+                                    <ShieldCheck size={24} strokeWidth={2.5} />
+                                </div>
+                                <div>
+                                    <p className="text-slate-500 text-[10px] font-black uppercase tracking-[0.2em] mb-1">Verification</p>
+                                    <p className="text-white text-lg font-extrabold">Editor Approved</p>
+                                </div>
                             </div>
+
+                            {/* Archival Card - Bottom Right */}
+                            <div className="absolute bottom-[0%] right-[5%] bg-slate-900/60 backdrop-blur-2xl border border-white/10 rounded-2xl p-6 flex items-center gap-5 shadow-2xl z-20 w-[280px] animate-float" style={{ animationDelay: '-5s' }}>
+                                <div className="w-12 h-12 rounded-xl bg-orange-500/20 flex items-center justify-center text-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.3)]">
+                                    <Database size={24} strokeWidth={2.5} />
+                                </div>
+                                <div>
+                                    <p className="text-slate-500 text-[10px] font-black uppercase tracking-[0.2em] mb-1">Archival State</p>
+                                    <p className="text-white text-lg font-extrabold">Immutable</p>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
-                    <div className="glow-circle"></div>
                 </div>
             </section>
 
             {/* The Pillars of Intelligence Section */}
-            <section className="learning-matrix-section">
-                <div className="section-header-cnt">
-                    <span className="sub-title">System Architecture</span>
-                    <h2 className="title-matrix">The <span className="text-gradient">Research Pillars</span></h2>
-                    <p className="section-desc">A multidimensional knowledge model designed for analysts, developers, and institutional researchers.</p>
-                </div>
+            <section className="learning-matrix-section bg-[#020617] py-32 px-8">
+                <div className="container max-w-[1440px] mx-auto">
+                    <div className="flex flex-col mb-20 border-b border-white/5 pb-12">
+                        <div className="mb-6">
+                            <span className="text-indigo-400 text-sm font-bold uppercase tracking-[0.3em] mb-4 block">System Architecture</span>
+                            <h2 className="text-white text-[56px] font-black leading-tight tracking-tight whitespace-nowrap">
+                                The <svg width="450" height="70" className="inline-block overflow-visible align-top">
+                                    <defs>
+                                        <linearGradient id="pillarsGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                            <stop offset="0%" style={{ stopColor: '#818cf8', stopOpacity: 1 }} />
+                                            <stop offset="100%" style={{ stopColor: '#f472b6', stopOpacity: 1 }} />
+                                        </linearGradient>
+                                    </defs>
+                                    <text x="0" y="55" fill="url(#pillarsGrad)" style={{ fontWeight: 900, fontSize: '56px', fontFamily: 'inherit' }}>Research Pillars</text>
+                                </svg>
+                            </h2>
+                        </div>
+                        <div className="max-w-2xl">
+                            <p className="text-slate-400 text-xl leading-relaxed font-medium">
+                                A multidimensional knowledge model designed for analysts, developers, and institutional researchers.
+                            </p>
+                        </div>
+                    </div>
 
-                <div className="matrix-grid">
-                    {[
-                        {
-                            title: 'Knowledge',
-                            desc: 'Deep structured encyclopedia of crypto, blockchain, and decentralized architectures.',
-                            icon: <BookOpen size={30} />,
-                            path: '/encyclopedia',
-                            grad: 'grad-1'
-                        },
-                        {
-                            title: 'Research',
-                            desc: 'Granular protocol breakdowns, tokenomics models, and risk architecture analysis.',
-                            icon: <FileSearch size={30} />,
-                            path: '/research',
-                            grad: 'grad-2'
-                        },
-                        {
-                            title: 'Tools',
-                            desc: 'Interactive simulators, comparison engines, and quantitative modeling tools.',
-                            icon: <Wrench size={30} />,
-                            path: '/tools',
-                            grad: 'grad-3'
-                        },
-                        {
-                            title: 'Intelligence',
-                            desc: 'Real-time market insights, sentiment tracking, and contextual trend reports.',
-                            icon: <LineChart size={30} />,
-                            path: '/intelligence',
-                            grad: 'grad-1'
-                        },
-                        {
-                            title: 'Community',
-                            desc: 'Peer review systems, expert validation, and collaborative article improvement.',
-                            icon: <Users2 size={30} />,
-                            path: '/community',
-                            grad: 'grad-2'
-                        },
-                        {
-                            title: 'Trust Layer',
-                            desc: 'Immutable source references, editor verification, and community truth scores.',
-                            icon: <ShieldCheck size={30} />,
-                            path: '/trust',
-                            grad: 'grad-3'
-                        }
-                    ].map((item, idx) => (
-                        <Link to={item.path} key={idx} className="matrix-card glass">
-                            <div className={`matrix-icon-wrapper ${item.grad}`}>
-                                {item.icon}
-                            </div>
-                            <div className="matrix-content">
-                                <h3 className="matrix-title">{item.title}</h3>
-                                <p className="matrix-description">{item.desc}</p>
-                                <div className="matrix-footer">
-                                    <span className="explore-text">Initialize Node</span>
-                                    <ArrowRight size={16} className="arrow-hover" />
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {/* Matrix Cards (Keeping existing structure but cleaning for design) */}
+                        {[
+                            { title: 'Knowledge', desc: 'Deep structured encyclopedia of crypto, blockchain, and decentralized architectures.', link: '/encyclopedia' },
+                            { title: 'Research', desc: 'Granular protocol breakdowns, tokenomics models, and risk architecture analysis.', link: '/research' },
+                            { title: 'Tools', desc: 'Interactive simulators, comparison engines, and quantitative modeling tools.', link: '/tools' },
+                            { title: 'Intelligence', desc: 'Real-time market insights, sentiment tracking, and contextual trend reports.', link: '/intelligence' },
+                            { title: 'Community', desc: 'Peer review systems, expert validation, and collaborative article improvement.', link: '/community' },
+                            { title: 'Trust Layer', desc: 'Immutable source references, editor verification, and community truth scores.', link: '/trust' }
+                        ].map((item, idx) => (
+                            <Link
+                                key={idx}
+                                to={item.link}
+                                className="bg-slate-900/20 backdrop-blur-lg border border-white/5 rounded-3xl p-10 hover:bg-slate-900/40 hover:border-indigo-500/30 transition-all duration-500 cursor-pointer group no-underline block"
+                            >
+                                <h3 className="text-white text-2xl font-bold mb-4">{item.title}</h3>
+                                <p className="text-slate-400 leading-relaxed mb-8">{item.desc}</p>
+                                <div className="flex items-center gap-3 text-indigo-400 font-bold group-hover:gap-5 transition-all">
+                                    Initialize Node <ArrowRight size={20} />
                                 </div>
-                            </div>
-                        </Link>
-                    ))}
+                            </Link>
+                        ))}
+                    </div>
                 </div>
             </section>
 
-            {/* Strategic Roadmap Section */}
             <RoadmapSection />
-
-            {/* Platform Comparison Engine Preview */}
-            <section className="comparison-preview-section container">
-                <div className="glass comparison-card">
-                    <div className="comparison-header">
-                        <h2>Advanced Comparison Engine</h2>
-                        <p>Analyze differences between protocols, architectures, and assets side-by-side.</p>
-                    </div>
-                    <div className="comparison-mock">
-                        <div className="mock-row header">
-                            <div>Feature</div>
-                            <div>Proof of Work</div>
-                            <div>Proof of Stake</div>
-                        </div>
-                        <div className="mock-row">
-                            <div>Security</div>
-                            <div className="high">Physical Energy</div>
-                            <div className="high">Economic Stake</div>
-                        </div>
-                        <div className="mock-row">
-                            <div>Sustainability</div>
-                            <div className="low">Resource Intensive</div>
-                            <div className="high">Energy Efficient</div>
-                        </div>
-                    </div>
-                    <Link to="/tools" className="text-btn">Launch Full Comparison Engine <ArrowRight size={16} /></Link>
-                </div>
-            </section>
-
-            {/* Trusted Verification Section */}
-            <section className="trust-section glass">
-                <div className="section-header-cnt">
-                    <p className="tiny-title">VERIFIED DATA SOURCES</p>
-                </div>
-                <div className="logos-scroll">
-                    {[
-                        "ETH Foundation", "NIST", "IEEE", "Chainlink Research", "Aave Labs", "Uniswap Core"
-                    ].map((logo, idx) => (
-                        <div key={idx} className="trust-logo">{logo}</div>
-                    ))}
-                    {[
-                        "ETH Foundation", "NIST", "IEEE", "Chainlink Research", "Aave Labs", "Uniswap Core"
-                    ].map((logo, idx) => (
-                        <div key={idx + 6} className="trust-logo">{logo}</div>
-                    ))}
-                </div>
-            </section>
-
-            {/* CTA */}
-            <section className="final-cta">
-                <div className="cta-content glass">
-                    <div className="cta-text">
-                        <h2>Scale Your Intelligence</h2>
-                        <p>Access the definitive knowledge layer for the next financial system.</p>
-                    </div>
-                    <Link to="/encyclopedia" className="btn-white-large">Enter Workspace</Link>
-                </div>
-            </section>
+            <SupportSection />
         </div>
     );
 };

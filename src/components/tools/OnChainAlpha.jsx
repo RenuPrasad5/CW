@@ -56,16 +56,16 @@ const OnChainAlpha = () => {
     return (
         <div className="animate-in fade-in duration-700">
             {/* Real-time KPI Stream */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 border-b border-slate-900/40">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 border-b border-slate-900/40">
                 {[
-                    { label: 'Network Velocity', val: '8.4M TPS', status: 'Optimal', icon: Zap, color: 'text-indigo-400' },
-                    { label: 'Whale Netflow', val: '+$1.42B', status: 'Accumulation', icon: Repeat, color: 'text-emerald-500' },
-                    { label: 'Ecosystem Growth', val: '+24.8%', status: 'Expansion', icon: Activity, color: 'text-emerald-500' },
-                    { label: 'Bridge Volume', val: '$842M', status: 'High Traffic', icon: Layers, color: 'text-white' },
+                    { label: 'Network Velocity', val: '8.4M TPS', status: 'Optimal', icon: <Zap size={16} />, color: 'text-indigo-400' },
+                    { label: 'Whale Netflow', val: '+$1.42B', status: 'Accumulation', icon: <Repeat size={16} />, color: 'text-emerald-500' },
+                    { label: 'Ecosystem Growth', val: '+24.8%', status: 'Expansion', icon: <Activity size={16} />, color: 'text-emerald-500' },
+                    { label: 'Bridge Volume', val: '$842M', status: 'High Traffic', icon: <Layers size={16} />, color: 'text-white' },
                 ].map((kpi, i) => (
-                    <div key={i} className="p-10 border-r last:border-r-0 border-slate-900/40 hover:bg-slate-900/10 transition-colors">
+                    <div key={i} className="py-8 px-6 border-r border-b sm:border-b-0 last:border-r-0 border-slate-900/40 hover:bg-slate-900/10 transition-colors">
                         <div className="flex items-center gap-3 mb-4">
-                            <kpi.icon size={16} className="text-slate-500" />
+                            <span className="text-slate-500">{kpi.icon}</span>
                             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">{kpi.label}</span>
                         </div>
                         <div className="text-3xl font-black text-white mb-2">{kpi.val}</div>
@@ -79,66 +79,68 @@ const OnChainAlpha = () => {
             <div className="grid grid-cols-1 lg:grid-cols-12 divide-x divide-slate-900/40 border-b border-slate-900/40">
                 {/* Ecosystem Liquidity Matrix - Continuous Stream (8 columns) */}
                 <div className="lg:col-span-8 px-0 border-b lg:border-b-0">
-                    <div className="p-12 pb-8">
+                    <div className="py-10 px-6">
                         <h2 className="text-sm font-black text-white uppercase tracking-widest mb-1">Ecosystem Liquidity Matrix</h2>
                         <p className="text-[10px] text-slate-500 font-bold uppercase tracking-tighter">Chain-level concentration and flow vectors</p>
                     </div>
 
-                    <table className="terminal-table-edge w-full">
-                        <thead>
-                            <tr>
-                                <th className="pl-12 w-16">Rank</th>
-                                <th>Blockchain Network</th>
-                                <th>Asset Concentration (TVL)</th>
-                                <th>Net Flow (24h)</th>
-                                <th>Liquidity Share</th>
-                                <th className="pr-12 text-right">State Vector</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {chains.map((chain, i) => (
-                                <tr key={i} className="hover:bg-slate-900/40 transition-colors border-b border-slate-900/20 last:border-0">
-                                    <td className="pl-12 metric-mono text-slate-500 text-xs">#{i + 1}</td>
-                                    <td>
-                                        <div className="flex items-center gap-4">
-                                            <div className="w-8 h-8 rounded bg-slate-950 border border-slate-900 flex items-center justify-center font-black text-indigo-400 text-[10px]">
-                                                {chain.name[0]}
-                                            </div>
-                                            <div>
-                                                <div className="text-[13px] font-black text-white uppercase tracking-tighter">{chain.name}</div>
-                                                <div className="text-[9px] text-slate-600 font-black uppercase tracking-widest">{chain.trend} Trend</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td className="metric-mono text-white font-bold">${chain.tvl}</td>
-                                    <td className={`metric-mono font-bold ${chain.inflow.startsWith('+') ? 'text-emerald-500' : 'text-rose-500'}`}>
-                                        {chain.inflow}
-                                    </td>
-                                    <td className="w-48">
-                                        <div className="h-1 w-full bg-slate-950 rounded-full overflow-hidden">
-                                            <div
-                                                className={`h-full ${parseFloat(chain.trend) > 5 ? 'bg-indigo-500' : 'bg-slate-700'}`}
-                                                style={{ width: `${chain.share}%` }}
-                                            ></div>
-                                        </div>
-                                    </td>
-                                    <td className="pr-12 text-right">
-                                        <div className={`text-[10px] font-black inline-flex items-center gap-1.5 uppercase ${chain.vector.includes('High') || chain.vector.includes('Max') || chain.vector === 'Expansion' ? 'text-emerald-500' :
-                                                chain.vector === 'Reduced' ? 'text-rose-500' : 'text-slate-500'
-                                            }`}>
-                                            {chain.vector}
-                                            {chain.inflow.startsWith('+') ? <TrendingUp size={10} /> : <TrendingDown size={10} />}
-                                        </div>
-                                    </td>
+                    <div className="overflow-x-auto border-y border-slate-900/40">
+                        <table className="terminal-table-edge w-full">
+                            <thead>
+                                <tr>
+                                    <th className="px-6 w-16">Rank</th>
+                                    <th>Blockchain Network</th>
+                                    <th>Asset Concentration (TVL)</th>
+                                    <th>Net Flow (24h)</th>
+                                    <th>Liquidity Share</th>
+                                    <th className="px-6 text-right">State Vector</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {chains.map((chain, i) => (
+                                    <tr key={i} className="hover:bg-slate-900/40 transition-colors border-b border-slate-900/20 last:border-0">
+                                        <td className="px-6 metric-mono text-slate-500 text-xs">#{i + 1}</td>
+                                        <td>
+                                            <div className="flex items-center gap-4">
+                                                <div className="w-8 h-8 rounded bg-slate-950 border border-slate-900 flex items-center justify-center font-black text-indigo-400 text-[10px]">
+                                                    {chain.name[0]}
+                                                </div>
+                                                <div>
+                                                    <div className="text-[13px] font-black text-white uppercase tracking-tighter">{chain.name}</div>
+                                                    <div className="text-[9px] text-slate-600 font-black uppercase tracking-widest">{chain.trend} Trend</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td className="metric-mono text-white font-bold">${chain.tvl}</td>
+                                        <td className={`metric-mono font-bold ${chain.inflow.startsWith('+') ? 'text-emerald-500' : 'text-rose-500'}`}>
+                                            {chain.inflow}
+                                        </td>
+                                        <td className="w-48">
+                                            <div className="h-1 w-full bg-slate-950 rounded-full overflow-hidden">
+                                                <div
+                                                    className={`h-full ${parseFloat(chain.trend) > 5 ? 'bg-indigo-500' : 'bg-slate-700'}`}
+                                                    style={{ width: `${chain.share}%` }}
+                                                ></div>
+                                            </div>
+                                        </td>
+                                        <td className="px-6 text-right">
+                                            <div className={`text-[10px] font-black inline-flex items-center gap-1.5 uppercase ${chain.vector.includes('High') || chain.vector.includes('Max') || chain.vector === 'Expansion' ? 'text-emerald-500' :
+                                                chain.vector === 'Reduced' ? 'text-rose-500' : 'text-slate-500'
+                                                }`}>
+                                                {chain.vector}
+                                                {chain.inflow.startsWith('+') ? <TrendingUp size={10} /> : <TrendingDown size={10} />}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
                 {/* Live Whale Stream (4 columns) */}
                 <div className="lg:col-span-4 p-0 bg-slate-900/5">
-                    <div className="p-12 pb-8 flex justify-between items-center">
+                    <div className="py-10 px-6 flex justify-between items-center bg-slate-950/20">
                         <div>
                             <h3 className="text-[11px] font-black text-white uppercase tracking-widest">Live Flow Intelligence</h3>
                             <p className="text-[9px] text-slate-500 font-bold uppercase mt-1">Institutional scale wallet movements</p>
@@ -150,7 +152,7 @@ const OnChainAlpha = () => {
 
                     <div className="divide-y divide-slate-900/40">
                         {WhaleAlerts.map((alert, i) => (
-                            <div key={i} className="p-10 hover:bg-slate-900/20 transition-colors cursor-pointer group">
+                            <div key={i} className="py-8 px-6 hover:bg-slate-900/20 transition-colors cursor-pointer group">
                                 <div className="flex justify-between items-start mb-4">
                                     <span className="metric-mono text-[11px] text-indigo-400 font-bold border-b border-indigo-500/30">{alert.wallet}</span>
                                     <span className="text-[9px] text-slate-600 font-black uppercase tracking-widest">{alert.time}</span>
@@ -162,8 +164,8 @@ const OnChainAlpha = () => {
                                         <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">{alert.type}</span>
                                     </div>
                                     <div className={`text-[9px] font-black px-2 py-0.5 rounded uppercase ${alert.risk === 'Extreme' ? 'bg-rose-600 text-white' :
-                                            alert.risk === 'High' ? 'text-rose-500 border border-rose-500/20' :
-                                                'text-slate-600 border border-slate-900'
+                                        alert.risk === 'High' ? 'text-rose-500 border border-rose-500/20' :
+                                            'text-slate-600 border border-slate-900'
                                         }`}>
                                         {alert.risk} IMPACT
                                     </div>
@@ -176,7 +178,7 @@ const OnChainAlpha = () => {
 
             {/* Bottom Sector: Combined Yield/Unlocks View */}
             <div className="grid grid-cols-1 lg:grid-cols-2 divide-x divide-slate-900/40 border-b border-slate-900/40">
-                <div className="p-12">
+                <div className="py-10 px-6">
                     <div className="flex items-center gap-3 mb-10">
                         <Zap size={18} className="text-amber-500" />
                         <h3 className="text-sm font-black text-white uppercase tracking-widest">Alpha Yield Opportunities</h3>
@@ -207,7 +209,7 @@ const OnChainAlpha = () => {
                     </div>
                 </div>
 
-                <div className="p-12">
+                <div className="py-10 px-6">
                     <div className="flex items-center gap-3 mb-10">
                         <Clock size={18} className="text-slate-400" />
                         <h3 className="text-sm font-black text-white uppercase tracking-widest">Asset Release Schedule</h3>

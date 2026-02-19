@@ -87,16 +87,16 @@ const MarketTerminal = () => {
     return (
         <div className="animate-in fade-in duration-700 w-full space-y-0 bg-[#020617]">
             {/* Market Indicators Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 border-b border-white/[0.05] w-full">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 border-b border-white/[0.05] w-full">
                 {[
-                    { label: 'Market Cap', val: '$3.14T', chg: '+2.4%', icon: Globe },
-                    { label: 'BTC Dominance', val: '56.4%', chg: '-0.2%', icon: Activity },
-                    { label: 'Stable Float', val: '$162B', chg: '+$1.2B', icon: Layers },
-                    { label: 'Volume (24h)', val: '$84.2B', chg: '+15%', icon: BarChart2 },
+                    { label: 'Market Cap', val: '$3.14T', chg: '+2.4%', icon: <Globe size={16} /> },
+                    { label: 'BTC Dominance', val: '56.4%', chg: '-0.2%', icon: <Activity size={16} /> },
+                    { label: 'Stable Float', val: '$162B', chg: '+$1.2B', icon: <Layers size={16} /> },
+                    { label: 'Volume (24h)', val: '$84.2B', chg: '+15%', icon: <BarChart2 size={16} /> },
                 ].map((kpi, i) => (
-                    <div key={i} className="p-10 border-r last:border-r-0 border-white/[0.05] group hover:bg-white/[0.02] transition-colors">
+                    <div key={i} className="py-8 px-6 border-r border-b sm:border-b-0 last:border-r-0 border-white/[0.05] group hover:bg-white/[0.02] transition-colors">
                         <div className="flex items-center gap-3 mb-4">
-                            <kpi.icon size={16} className="text-slate-500 group-hover:text-indigo-400 transition-colors" />
+                            <span className="text-slate-500 group-hover:text-indigo-400 transition-colors">{kpi.icon}</span>
                             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">{kpi.label}</span>
                         </div>
                         <div className="text-3xl font-black text-white mb-2">{kpi.val}</div>
@@ -109,7 +109,7 @@ const MarketTerminal = () => {
 
             {/* Asset Intelligence Matrix Section */}
             <section className="py-12 border-b border-white/[0.05] w-full">
-                <div className="px-10 mb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+                <div className="mb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
                     <div className="space-y-1">
                         <h2 className="text-sm font-black text-white uppercase tracking-widest">Asset Intelligence Matrix</h2>
                         <p className="text-[10px] text-slate-500 font-bold uppercase tracking-tighter">Real-time flux & institutional positioning across 25 core identifiers</p>
@@ -126,11 +126,11 @@ const MarketTerminal = () => {
                     </div>
                 </div>
 
-                <div className="overflow-x-auto w-full">
+                <div className="overflow-x-auto w-full border border-white/[0.05] rounded-xl">
                     <table className="terminal-table-edge w-full">
                         <thead>
                             <tr>
-                                <th className="hover:text-white cursor-pointer group px-10" onClick={() => handleSort('name')}>
+                                <th className="hover:text-white cursor-pointer group px-6" onClick={() => handleSort('name')}>
                                     <div className="flex items-center gap-2">
                                         Asset Identifier <ArrowUpDown size={10} className="text-slate-700 group-hover:text-indigo-400" />
                                     </div>
@@ -155,7 +155,7 @@ const MarketTerminal = () => {
                                         Market Cap <ArrowUpDown size={10} className="text-slate-700 group-hover:text-indigo-400" />
                                     </div>
                                 </th>
-                                <th className="text-right px-10 hover:text-white cursor-pointer group" onClick={() => handleSort('momentum')}>
+                                <th className="text-right px-6 hover:text-white cursor-pointer group" onClick={() => handleSort('momentum')}>
                                     <div className="flex items-center justify-end gap-2">
                                         Momentum Vector <ArrowUpDown size={10} className="text-slate-700 group-hover:text-indigo-400" />
                                     </div>
@@ -165,7 +165,7 @@ const MarketTerminal = () => {
                         <tbody>
                             {filteredAndSortedAssets.map((asset, i) => (
                                 <tr key={i} className="hover:bg-white/[0.02] transition-colors border-b border-white/[0.02] last:border-0">
-                                    <td className="px-10 py-5">
+                                    <td className="px-6 py-5">
                                         <div className="flex items-center gap-4">
                                             <div className="w-8 h-8 rounded bg-slate-950 border border-white/[0.05] flex items-center justify-center font-black text-slate-500 text-[10px]">
                                                 {asset.symbol[0]}
@@ -184,9 +184,9 @@ const MarketTerminal = () => {
                                     </td>
                                     <td className="text-slate-500 metric-mono text-xs">{asset.vol}</td>
                                     <td className="text-slate-500 metric-mono text-xs">{formatCurrency(asset.mkt)}</td>
-                                    <td className="w-64 px-10">
-                                        <div className="flex items-center gap-3">
-                                            <div className="h-1 flex-1 bg-slate-950 rounded-full overflow-hidden border border-white/[0.05]">
+                                    <td className="w-64 px-6 text-right">
+                                        <div className="flex items-center justify-end gap-3">
+                                            <div className="h-1 w-24 bg-slate-950 rounded-full overflow-hidden border border-white/[0.05]">
                                                 <div
                                                     className={`h-full transition-all duration-1000 ${asset.momentum > 70 ? 'bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.5)]' :
                                                         asset.momentum < 40 ? 'bg-rose-500 shadow-[0_0_8px_rgba(239,68,68,0.5)]' :
@@ -306,12 +306,12 @@ const MarketTerminal = () => {
                             </div>
                             <div className="flex-1 overflow-y-auto p-2">
                                 {[
-                                    { type: 'Liquidity Add', amt: '$420,000', pair: 'WETH/USDT', time: '2m ago', icon: Globe, status: 'positive' },
-                                    { type: 'Large Swap', amt: '84.2 ETH', pair: 'WETH/USDC', time: '5m ago', icon: Activity, status: 'neutral' },
-                                    { type: 'Liquidity Rem', amt: '$1.2M', pair: 'WBTC/ETH', time: '12m ago', icon: Info, status: 'negative' },
-                                    { type: 'Price Break', amt: '+5.2%', pair: 'SOL/USDC', time: '15m ago', icon: TrendingUp, status: 'positive' },
-                                    { type: 'Whale Buy', amt: '12,500 ARB', pair: 'ARB/USDC', time: '22m ago', icon: Layers, status: 'positive' },
-                                    { type: 'Big Move', amt: '-4.8%', pair: 'SUI/USDC', time: '30m ago', icon: Activity, status: 'negative' },
+                                    { type: 'Liquidity Add', amt: '$420,000', pair: 'WETH/USDT', time: '2m ago', icon: <Globe size={16} />, status: 'positive' },
+                                    { type: 'Large Swap', amt: '84.2 ETH', pair: 'WETH/USDC', time: '5m ago', icon: <Activity size={16} />, status: 'neutral' },
+                                    { type: 'Liquidity Rem', amt: '$1.2M', pair: 'WBTC/ETH', time: '12m ago', icon: <Info size={16} />, status: 'negative' },
+                                    { type: 'Price Break', amt: '+5.2%', pair: 'SOL/USDC', time: '15m ago', icon: <TrendingUp size={16} />, status: 'positive' },
+                                    { type: 'Whale Buy', amt: '12,500 ARB', pair: 'ARB/USDC', time: '22m ago', icon: <Layers size={16} />, status: 'positive' },
+                                    { type: 'Big Move', amt: '-4.8%', pair: 'SUI/USDC', time: '30m ago', icon: <Activity size={16} />, status: 'negative' },
                                 ].map((alert, i) => (
                                     <div key={i} className="p-5 border-b border-white/[0.02] last:border-0 hover:bg-white/[0.03] transition-colors cursor-pointer group rounded-2xl mx-2 my-1">
                                         <div className="flex justify-between items-start mb-2">

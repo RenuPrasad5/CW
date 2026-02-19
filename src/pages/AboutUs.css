@@ -4,6 +4,53 @@
     min-height: 100vh;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     overflow-x: hidden;
+    position: relative;
+}
+
+.about-page-header {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    z-index: 100;
+    padding: 2.5rem 4rem 1rem 4rem;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.about-page-header .back-to-terminal-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(30, 41, 59, 0.4);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #94a3b8;
+    padding: 0.6rem 1.2rem;
+    border-radius: 100px;
+    /* Pill shape for industry look */
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    letter-spacing: 0.02em;
+}
+
+.about-page-header .back-to-terminal-btn:hover {
+    background: rgba(99, 102, 241, 0.1);
+    border-color: rgba(99, 102, 241, 0.5);
+    color: #fff;
+    transform: translateX(-4px);
+    /* Subtle indicator of "back" action */
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.15);
+}
+
+.about-page-header .back-to-terminal-btn svg {
+    color: #6366f1;
+    transition: transform 0.4s ease;
+}
+
+.about-page-header .back-to-terminal-btn:hover svg {
+    transform: translateX(-2px);
 }
 
 /* Terminal Overlay */
@@ -569,6 +616,10 @@
 
     .about-hero h1 {
         font-size: 3.2rem;
+    }
+
+    .about-page-header {
+        padding: 1.5rem 2rem;
     }
 
     .cta-box {

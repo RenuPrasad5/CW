@@ -39,7 +39,15 @@ const RoadmapSection = () => {
             <div className="roadmap-v8-global-header">
                 <span className="roadmap-v8-pill">TERMINAL_ROADMAP_v3.1</span>
                 <h2 className="roadmap-v8-title">
-                    Roadmap to become Master in <span className="text-gradient">Crypto Industry</span>
+                    Roadmap to become Master in <svg width="500" height="70" className="inline-block overflow-visible align-top -mt-2">
+                        <defs>
+                            <linearGradient id="roadmapGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style={{ stopColor: '#818cf8', stopOpacity: 1 }} />
+                                <stop offset="100%" style={{ stopColor: '#f472b6', stopOpacity: 1 }} />
+                            </linearGradient>
+                        </defs>
+                        <text x="0" y="55" fill="url(#roadmapGrad)" style={{ fontWeight: 800, fontSize: '48px', fontFamily: 'inherit' }}>Crypto Industry</text>
+                    </svg>
                 </h2>
                 <p className="roadmap-v8-subtitle">
                     A multi-phase progression through the architectural layers of the blockchain ecosystem.

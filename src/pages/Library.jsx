@@ -12,7 +12,7 @@ import {
     FileText,
     Shield,
     Activity,
-    Layers,
+    Layers as LayersIcon,
     ArrowLeft
 } from 'lucide-react';
 import './Library.css';
@@ -125,7 +125,7 @@ const Library = () => {
                             <button className="btn-white">Continue Reading</button>
                         </div>
                         <div className="visual">
-                            <Layers size={80} color="rgba(255,255,255,0.2)" />
+                            <LayersIcon size={80} color="rgba(255,255,255,0.2)" />
                         </div>
                     </div>
 

@@ -18,7 +18,8 @@ import {
     Database,
     LineChart,
     Users2,
-    CheckCircle
+    CheckCircle,
+    Layers as LayersIcon
 } from 'lucide-react';
 import logo from '../assets/logo.png';
 import './Sidebar.css';
@@ -29,6 +30,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         { title: 'Terminal', icon: <Globe size={20} />, path: '/' },
         { title: 'Encyclopedia', icon: <Database size={20} />, path: '/encyclopedia' },
         { title: 'Protocol Research', icon: <FileSearch size={20} />, path: '/research' },
+        { title: 'Blockchain Hub', icon: <LayersIcon size={20} />, path: '/blockchain-hub' },
         { title: 'Intelligence Hub', icon: <LineChart size={20} />, path: '/intelligence' },
         { title: 'Analysis Tools', icon: <Wrench size={20} />, path: '/tools' },
         { title: 'Peer Review', icon: <Users2 size={20} />, path: '/community' },

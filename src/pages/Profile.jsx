@@ -1,160 +1,316 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
     User,
-    Settings,
-    Award,
-    BookOpen,
-    History,
+    Mail,
     Shield,
-    Bell,
+    Key,
     LogOut,
-    ChevronRight,
-    Star,
-    CheckCircle2,
+    Trash2,
+    Camera,
+    Globe,
+    Info,
     Clock,
-    Flame
+    CheckCircle,
+    AlertCircle,
+    Save,
+    ChevronRight
 } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+import { db, storage, auth as firebaseAuth } from '../firebase/config';
+import { doc, updateDoc, onSnapshot } from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { updatePassword, deleteUser, sendPasswordResetEmail } from 'firebase/auth';
 import './Profile.css';
 
 const Profile = () => {
+    const { user, userData, logout } = useAuth();
+    const [loading, setLoading] = useState(false);
+    const [message, setMessage] = useState({ type: '', text: '' });
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const fileInputRef = useRef(null);
+
+    // Form states
+    const [formData, setFormData] = useState({
+        displayName: '',
+        username: '',
+        bio: '',
+        country: '',
+        role: 'Beginner'
+    });
+
+    useEffect(() => {
+        if (userData) {
+            setFormData({
+                displayName: userData.displayName || userData.name || '',
+                username: userData.username || '',
+                bio: userData.bio || '',
+                country: userData.country || '',
+                role: userData.role || 'Beginner'
+            });
+        }
+    }, [userData]);
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        if (name === 'bio' && value.length > 160) return;
+        setFormData(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleSaveProfile = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setMessage({ type: '', text: '' });
+
+        try {
+            const userRef = doc(db, 'users', user.uid);
+            await updateDoc(userRef, {
+                ...formData,
+                updatedAt: new Date().toISOString()
+            });
+            setMessage({ type: 'success', text: 'Profile updated successfully!' });
+        } catch (error) {
+            console.error("Update error:", error);
+            setMessage({ type: 'error', text: 'Failed to update profile.' });
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleImageUpload = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        setLoading(true);
+        try {
+            const storageRef = ref(storage, `avatars/${user.uid}`);
+            await uploadBytes(storageRef, file);
+            const downloadURL = await getDownloadURL(storageRef);
+
+            const userRef = doc(db, 'users', user.uid);
+            await updateDoc(userRef, { photoURL: downloadURL });
+
+            setMessage({ type: 'success', text: 'Profile picture updated!' });
+        } catch (error) {
+            console.error("Upload error:", error);
+            setMessage({ type: 'error', text: 'Failed to upload image.' });
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handlePasswordReset = async () => {
+        try {
+            await sendPasswordResetEmail(firebaseAuth, user.email);
+            setMessage({ type: 'success', text: 'Password reset link sent to your email.' });
+        } catch (error) {
+            setMessage({ type: 'error', text: 'Failed to send reset email.' });
+        }
+    };
+
+    const handleDeleteAccount = async () => {
+        try {
+            // In production, you might want to re-authenticate the user first
+            await deleteUser(user);
+            await logout();
+        } catch (error) {
+            setMessage({ type: 'error', text: 'Failed to delete account. You may need to login again to perform this sensitive operation.' });
+            setShowDeleteModal(false);
+        }
+    };
+
+    if (!user) return null;
+
     return (
-        <div className="profile-container fade-in">
-            <header className="page-header">
-                <div className="page-title-group">
-                    <div className="badge grad-primary">User Profile</div>
-                    <h1>Your Professional Identity</h1>
-                    <p>Manage your account, track certifications, and security settings.</p>
-                </div>
-            </header>
+        <div className="profile-page-container">
+            <div className="profile-max-width">
 
-            <div className="profile-layout">
-                <aside className="profile-sidebar">
-                    <div className="profile-main-card glass">
-                        <div className="profile-avatar-large">
-                            <div className="avatar-content">K</div>
-                            <div className="status-indicator"></div>
-                        </div>
-                        <h2>Karthik</h2>
-                        <span className="user-email">karthik.p@cryptoworld.inc</span>
-                        <div className="user-membership-badge">
-                            <Star size={14} fill="currentColor" /> Pro Member
-                        </div>
-                        <div className="profile-stats-mini">
-                            <div className="p-stat">
-                                <span className="p-val">4.5k</span>
-                                <span className="p-lbl">Reputation</span>
-                            </div>
-                            <div className="p-stat">
-                                <span className="p-val">12</span>
-                                <span className="p-lbl">Certs</span>
-                            </div>
-                            <div className="p-stat">
-                                <span className="p-val">28</span>
-                                <span className="p-lbl">Streak</span>
-                            </div>
-                        </div>
-                        <button className="btn-primary-full">Edit Profile</button>
+                {message.text && (
+                    <div className={`status-msg ${message.type}`}>
+                        {message.type === 'success' ? <CheckCircle size={18} /> : <AlertCircle size={18} />}
+                        {message.text}
                     </div>
+                )}
 
-                    <div className="profile-menu-groups">
-                        <div className="menu-group glass">
-                            <button className="menu-item active">
-                                <User size={18} /> Account Info
-                            </button>
-                            <button className="menu-item">
-                                <Bell size={18} /> Notifications
-                                <span className="menu-badge">3</span>
-                            </button>
-                            <button className="menu-item">
-                                <Shield size={18} /> Security
-                            </button>
+                {/* SECTION 1: HEADER */}
+                <section className="profile-section-card">
+                    <div className="profile-header-content">
+                        <div className="avatar-upload-wrapper">
+                            <img
+                                src={userData?.photoURL || 'https://via.placeholder.com/120'}
+                                alt="Profile"
+                                className="profile-avatar-large"
+                            />
+                            <div className="avatar-edit-overlay" onClick={() => fileInputRef.current.click()}>
+                                <Camera size={18} />
+                            </div>
+                            <input
+                                type="file"
+                                ref={fileInputRef}
+                                onChange={handleImageUpload}
+                                style={{ display: 'none' }}
+                                accept="image/*"
+                            />
                         </div>
-                        <div className="menu-group glass">
-                            <button className="menu-item">
-                                <Settings size={18} /> Preferences
-                            </button>
-                            <button className="menu-item logout">
-                                <LogOut size={18} /> Logout
-                            </button>
+                        <div className="profile-header-info">
+                            <h1>{formData.displayName || 'Set Name'}</h1>
+                            <p className="username">@{formData.username || 'username'}</p>
+                            <div className="profile-badge-group">
+                                <span className="role-badge">{formData.role}</span>
+                                <span className="role-badge" style={{ background: 'rgba(16, 185, 129, 0.1)', color: '#10b981', borderColor: 'rgba(16, 185, 129, 0.2)' }}>Verified Holder</span>
+                            </div>
                         </div>
                     </div>
-                </aside>
+                </section>
 
-                <main className="profile-main-content">
-                    <div className="profile-sections">
-                        <section className="profile-section glass">
-                            <div className="section-head">
-                                <h3><Award size={20} color="var(--accent-gold)" /> Verified Certificates</h3>
-                                <button className="text-btn">View All</button>
+                {/* SECTION 2: BASIC INFORMATION */}
+                <section className="profile-section-card">
+                    <h2 className="section-title"><User size={20} className="text-blue-500" /> Basic Information</h2>
+                    <form onSubmit={handleSaveProfile} className="profile-form">
+                        <div className="profile-form-grid">
+                            <div className="input-group">
+                                <label>Full Name</label>
+                                <input
+                                    type="text"
+                                    name="displayName"
+                                    value={formData.displayName}
+                                    onChange={handleInputChange}
+                                    className="profile-input"
+                                    placeholder="Enter your full name"
+                                />
                             </div>
-                            <div className="cert-grid">
-                                {[
-                                    { title: 'DeFi Architecture Specialist', date: 'Jan 2024', level: 'Advanced' },
-                                    { title: 'Blockchain Security Associate', date: 'Dec 2023', level: 'Intermediate' },
-                                    { title: 'ZK-Proof Implementation', date: 'Nov 2023', level: 'Expert' }
-                                ].map((cert, idx) => (
-                                    <div key={idx} className="cert-card">
-                                        <div className="cert-icon">
-                                            <CheckCircle2 size={24} color="#10b981" />
-                                        </div>
-                                        <div className="cert-info">
-                                            <h4>{cert.title}</h4>
-                                            <p>{cert.date} • {cert.level}</p>
-                                        </div>
-                                        <button className="btn-icon"><ChevronRight size={18} /></button>
-                                    </div>
-                                ))}
+                            <div className="input-group">
+                                <label>Username</label>
+                                <input
+                                    type="text"
+                                    name="username"
+                                    value={formData.username}
+                                    onChange={handleInputChange}
+                                    className="profile-input"
+                                    placeholder="choose_username"
+                                />
                             </div>
-                        </section>
+                            <div className="input-group">
+                                <label>Email Address (Read-only)</label>
+                                <input
+                                    type="email"
+                                    value={user.email}
+                                    disabled
+                                    className="profile-input"
+                                />
+                            </div>
+                            <div className="input-group">
+                                <label>Country / Region</label>
+                                <input
+                                    type="text"
+                                    name="country"
+                                    value={formData.country}
+                                    onChange={handleInputChange}
+                                    className="profile-input"
+                                    placeholder="e.g. United States"
+                                />
+                            </div>
+                            <div className="input-group lg:col-span-2">
+                                <label>Bio</label>
+                                <textarea
+                                    name="bio"
+                                    value={formData.bio}
+                                    onChange={handleInputChange}
+                                    className="profile-input profile-textarea"
+                                    placeholder="Write a short bio about your crypto research interests..."
+                                ></textarea>
+                                <span className="char-limit">{formData.bio.length} / 160</span>
+                            </div>
+                        </div>
+                        <button type="submit" className="save-btn" disabled={loading}>
+                            {loading ? 'Saving...' : 'Save Changes'}
+                        </button>
+                    </form>
+                </section>
 
-                        <div className="secondary-sections">
-                            <section className="profile-section glass learning-history">
-                                <div className="section-head">
-                                    <h3><History size={20} color="var(--primary)" /> Recent Activity</h3>
-                                </div>
-                                <div className="activity-list">
-                                    {[
-                                        { action: 'Completed', target: 'L2 Scaling Deep Dive', time: '2h ago' },
-                                        { action: 'Joined', target: 'Governance Discussion', time: '5h ago' },
-                                        { action: 'Updated', target: 'Portfolio Tracker', time: '1d ago' },
-                                        { action: 'Earned', target: 'Research Badge', time: '2d ago' }
-                                    ].map((act, idx) => (
-                                        <div key={idx} className="activity-item">
-                                            <div className="act-dot"></div>
-                                            <div className="act-content">
-                                                <p><strong>{act.action}</strong> {act.target}</p>
-                                                <span>{act.time}</span>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </section>
-
-                            <section className="profile-section glass goals-card">
-                                <div className="section-head">
-                                    <h3><Flame size={20} color="#f97316" /> Monthly Goals</h3>
-                                </div>
-                                <div className="goals-progress">
-                                    <div className="goal-item">
-                                        <div className="goal-info">
-                                            <span>Articles Read</span>
-                                            <span>8/10</span>
-                                        </div>
-                                        <div className="p-bar"><div className="p-fill" style={{ width: '80%' }}></div></div>
-                                    </div>
-                                    <div className="goal-item">
-                                        <div className="goal-info">
-                                            <span>Quiz Accuracy</span>
-                                            <span>92%</span>
-                                        </div>
-                                        <div className="p-bar"><div className="p-fill" style={{ width: '92%', background: '#10b981' }}></div></div>
-                                    </div>
-                                </div>
-                            </section>
+                {/* SECTION 3: SECURITY & ACCOUNT */}
+                <section className="profile-section-card">
+                    <h2 className="section-title"><Shield size={20} className="text-blue-500" /> Security & Account</h2>
+                    <div className="security-status-grid">
+                        <div className="status-item">
+                            <div className="status-label">
+                                <Mail size={18} />
+                                <span>Email Verification</span>
+                            </div>
+                            <span className={`status-value ${user.emailVerified ? 'verified' : 'unverified'}`}>
+                                {user.emailVerified ? 'Verified' : 'Unverified'}
+                            </span>
+                        </div>
+                        <div className="status-item">
+                            <div className="status-label">
+                                <Key size={18} />
+                                <span>Password Management</span>
+                            </div>
+                            <button className="action-btn" onClick={handlePasswordReset}>Change Password</button>
+                        </div>
+                        <div className="status-item">
+                            <div className="status-label">
+                                <Info size={18} />
+                                <span>Auth Provider</span>
+                            </div>
+                            <span className="status-value uppercase">{user.providerData[0]?.providerId || 'Email'}</span>
+                        </div>
+                        <div className="status-item">
+                            <div className="status-label">
+                                <Clock size={16} />
+                                <span>Last Intelligence Login</span>
+                            </div>
+                            <span className="status-value">{new Date(user.metadata.lastSignInTime).toLocaleDateString()}</span>
                         </div>
                     </div>
-                </main>
+                </section>
+
+                {/* SECTION 4: SYSTEM INFO */}
+                <section className="profile-section-card">
+                    <h2 className="section-title"><Globe size={20} className="text-blue-500" /> System Information</h2>
+                    <div className="system-info-grid">
+                        <div className="info-item">
+                            <span className="info-label">Account Created</span>
+                            <span className="info-text">{new Date(user.metadata.creationTime).toLocaleDateString()}</span>
+                        </div>
+                        <div className="info-item">
+                            <span className="info-label">Current Access Mode</span>
+                            <span className="info-text uppercase">{formData.role} Research Hub</span>
+                        </div>
+                        <div className="info-item">
+                            <span className="info-label">Active Session ID</span>
+                            <span className="info-text">{user.uid.substring(0, 12)}...</span>
+                        </div>
+                    </div>
+                </section>
+
+                {/* SECTION 5: DANGER ZONE */}
+                <section className="profile-section-card danger-zone">
+                    <h2 className="section-title danger-title"><AlertCircle size={20} /> Danger Zone</h2>
+                    <div className="danger-options">
+                        <button className="logout-btn-profile" onClick={() => logout()}>
+                            <LogOut size={18} style={{ marginRight: '8px' }} /> Logout
+                        </button>
+                        <button className="delete-btn" onClick={() => setShowDeleteModal(true)}>
+                            <Trash2 size={18} style={{ marginRight: '8px' }} /> Delete Account
+                        </button>
+                    </div>
+                </section>
+
             </div>
+
+            {/* Delete Account Modal */}
+            {showDeleteModal && (
+                <div className="modal-overlay">
+                    <div className="modal-content glass">
+                        <h3>Delete Your Intelligence Account?</h3>
+                        <p>This action is irreversible. All your research bookmarks, saved protocols, and profile data will be purged from the terminal.</p>
+                        <div className="modal-actions">
+                            <button className="action-btn" onClick={() => setShowDeleteModal(false)}>Cancel</button>
+                            <button className="delete-btn" onClick={handleDeleteAccount}>Confirm Deletion</button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

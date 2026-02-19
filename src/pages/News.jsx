@@ -7,16 +7,19 @@ import {
     Shield,
     Zap,
     Globe,
-    Layers,
+    Layers as LayersIcon,
     BarChart2,
     AlertTriangle,
     ExternalLink,
     RefreshCw,
-    Eye
+    Eye,
+    ArrowLeft
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import './News.css';
 
 const News = () => {
+    const navigate = useNavigate();
     const [news, setNews] = useState([]);
     const [loading, setLoading] = useState(true);
     const [activeCategory, setActiveCategory] = useState('ALL');
@@ -25,8 +28,8 @@ const News = () => {
 
     const categories = [
         { id: 'ALL', label: 'All Intel', icon: <Globe size={16} /> },
-        { id: 'BTC', label: 'Bitcoin', icon: <Layers size={16} /> },
-        { id: 'ETH', label: 'Ethereum', icon: <Layers size={16} /> },
+        { id: 'BTC', label: 'Bitcoin', icon: <LayersIcon size={16} /> },
+        { id: 'ETH', label: 'Ethereum', icon: <LayersIcon size={16} /> },
         { id: 'DEFI', label: 'DeFi', icon: <BarChart2 size={16} /> },
         { id: 'NFT', label: 'NFTs & Gaming', icon: <Zap size={16} /> },
         { id: 'REGULATION', label: 'Regulations', icon: <Shield size={16} /> },
@@ -82,6 +85,18 @@ const News = () => {
 
     return (
         <div className="news-terminal">
+            {/* Header with Back Button */}
+            <div className="news-page-header">
+                <button className="back-to-terminal-btn" onClick={() => navigate('/')}>
+                    <ArrowLeft size={16} />
+                    Back to Terminal
+                </button>
+                <div className="terminal-status-indicator">
+                    <span className="pulse-dot-small"></span>
+                    LIVE INTEL FEED ACTIVE
+                </div>
+            </div>
+
             {/* Breaking News Ticker */}
             <div className="news-ticker-container">
                 <div className="ticker-label">
@@ -143,52 +158,54 @@ const News = () => {
 
                 {/* Center - News Feed */}
                 <main className="news-feed-center">
-                    <div className="feed-header">
-                        <div>
-                            <h2>Market Intelligence Stream</h2>
-                            <div className="feed-stats">
-                                Showing {filteredNews.length} active nodes • Latency: 24ms • Last Sync: {lastRefreshed.toLocaleTimeString()}
+                    <div className="news-feed-container">
+                        <div className="feed-header">
+                            <div>
+                                <h2>Market Intelligence Stream</h2>
+                                <div className="feed-stats">
+                                    Showing {filteredNews.length} active nodes • Latency: 24ms • Last Sync: {lastRefreshed.toLocaleTimeString()}
+                                </div>
+                            </div>
+                            <div className="impact-legend">
+                                <span className="legend-item"><span className="dot high"></span> Critical</span>
+                                <span className="legend-item"><span className="dot medium"></span> Moderate</span>
+                                <span className="legend-item"><span className="dot low"></span> Low</span>
                             </div>
                         </div>
-                        <div className="impact-legend">
-                            <span className="legend-item"><span className="dot high"></span> Critical</span>
-                            <span className="legend-item"><span className="dot medium"></span> Moderate</span>
-                            <span className="legend-item"><span className="dot low"></span> Low</span>
-                        </div>
-                    </div>
 
-                    {loading ? (
-                        <div className="loading-state">
-                            <RefreshCw className="animate-spin" />
-                            <span>Synchronizing Intelligence Feeds...</span>
-                        </div>
-                    ) : (
-                        <div className="news-cards-container">
-                            {filteredNews.map(item => (
-                                <article key={item.id} className="news-card" onClick={() => window.open(item.url, '_blank')}>
-                                    <div className="card-top">
-                                        <span className="category-tag">{item.category}</span>
-                                        <div className={`impact-tag ${item.impact.toLowerCase()}`}>
-                                            <Shield size={10} />
-                                            {item.impact} IMPACT
+                        {loading ? (
+                            <div className="loading-state">
+                                <RefreshCw className="animate-spin" />
+                                <span>Synchronizing Intelligence Feeds...</span>
+                            </div>
+                        ) : (
+                            <div className="news-cards-container">
+                                {filteredNews.map(item => (
+                                    <article key={item.id} className="news-card" onClick={() => window.open(item.url, '_blank')}>
+                                        <div className="card-top">
+                                            <span className="category-tag">{item.category}</span>
+                                            <div className={`impact-tag ${item.impact.toLowerCase()}`}>
+                                                <Shield size={10} />
+                                                {item.impact} IMPACT
+                                            </div>
                                         </div>
-                                    </div>
-                                    <h3>{item.title}</h3>
-                                    <p className="news-summary">{item.body.substring(0, 180)}...</p>
-                                    <div className="card-footer">
-                                        <div className="source-info">
-                                            <img src={item.source_info.img} alt={item.source_info.name} className="source-icon" />
-                                            <span>{item.source_info.name}</span>
-                                            <span className="divider">•</span>
-                                            <Clock size={12} />
-                                            <span>{new Date(item.published_on * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                                        <h3>{item.title}</h3>
+                                        <p className="news-summary">{item.body.substring(0, 180)}...</p>
+                                        <div className="card-footer">
+                                            <div className="source-info">
+                                                <img src={item.source_info.img} alt={item.source_info.name} className="source-icon" />
+                                                <span>{item.source_info.name}</span>
+                                                <span className="divider">•</span>
+                                                <Clock size={12} />
+                                                <span>{new Date(item.published_on * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                                            </div>
+                                            <ExternalLink size={14} className="external-link" />
                                         </div>
-                                        <ExternalLink size={14} className="external-link" />
-                                    </div>
-                                </article>
-                            ))}
-                        </div>
-                    )}
+                                    </article>
+                                ))}
+                            </div>
+                        )}
+                    </div>
                 </main>
 
                 {/* Right Sidebar - Intelligence Panels */}

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import { ArrowLeft } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import './AboutUs.css';
 import founderImg from '../assets/images/founder.jpg';
 
@@ -70,6 +72,7 @@ const SectionReveal = ({ children, className }) => {
 };
 
 const AboutUs = () => {
+    const navigate = useNavigate();
     const [showIntro, setShowIntro] = useState(true);
     const { scrollYProgress } = useScroll();
 
@@ -82,6 +85,14 @@ const AboutUs = () => {
 
     return (
         <div className="about-us-page">
+            {/* Header with Back Button */}
+            <div className="about-page-header">
+                <button className="back-to-terminal-btn" onClick={() => navigate('/')}>
+                    <ArrowLeft size={16} />
+                    Back to Terminal
+                </button>
+            </div>
+
             <AnimatePresence>
                 {showIntro && <TerminalIntro onComplete={() => setShowIntro(false)} />}
             </AnimatePresence>
@@ -340,6 +351,7 @@ const AboutUs = () => {
                         className="cta-btn-premium"
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
+                        onClick={() => navigate('/community')}
                     >Access Intelligence Terminal</motion.button>
                 </motion.div>
             </SectionReveal>

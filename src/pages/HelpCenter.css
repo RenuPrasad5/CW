@@ -1,0 +1,144 @@
+.help-center-page {
+    padding: 6rem 0;
+    min-height: 100vh;
+}
+
+.help-content-wrap {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 4rem;
+    border-radius: var(--radius-xl);
+}
+
+.help-header-hero {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.help-icon-box {
+    width: 80px;
+    height: 80px;
+    background: rgba(99, 102, 241, 0.1);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+}
+
+.help-header-hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    background: linear-gradient(to right, #fff, #94a3b8);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.help-header-hero p {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+}
+
+.help-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.help-form label {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.help-form input,
+.help-form select,
+.help-form textarea {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    color: var(--text-main);
+    font-family: inherit;
+    transition: var(--transition);
+}
+
+.help-form input:focus,
+.help-form select:focus,
+.help-form textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.help-form textarea {
+    min-height: 180px;
+    resize: vertical;
+}
+
+.input-with-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-with-icon .icon {
+    position: absolute;
+    left: 1rem;
+    color: var(--text-muted);
+}
+
+.input-with-icon input {
+    padding-left: 3rem;
+}
+
+.submit-ticket-btn {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: var(--primary);
+    color: white;
+    border-radius: var(--radius-md);
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    transition: var(--transition);
+}
+
+.submit-ticket-btn:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+}
+
+.submit-ticket-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+@media (max-width: 768px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .help-content-wrap {
+        padding: 2.5rem 1.5rem;
+    }
+
+    .help-header-hero h1 {
+        font-size: 2rem;
+    }
+}
